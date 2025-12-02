@@ -85,7 +85,6 @@ async function downloadRepo(dir = "", basePath = "/home/container") {
   }
 }
 
-// --- COMMAND START ---
 bot.start((ctx) => {
   const thumbnail = "https://d.top4top.io/p_3615qg2ah1.jpg";
   
@@ -96,11 +95,11 @@ Selamat datang di <b>GitHub Manager Bot</b>.
 Kelola & update script kamu langsung dari Telegram dengan mudah.
 
 <b>📁 MENU UTAMA:</b>
-• <code>/uploadgh</code> — Upload file yang sedang diproses ke GitHub
-• <code>/pullupdate</code> — Tarik update script langsung dari repository
+•/uploadgh — Upload file yang ingin diproses ke GitHub
+•/pullupdate — Update script bot otomatis
 
 <b>📌 Cara Upload:</b>
-1. Kirim file atau ZIP ke chat ini.
+1. Kirim File atau ZIP 
 2. Reply file tersebut.
 3. Jalankan perintah <code>/uploadgh</code>.
 
@@ -205,6 +204,5 @@ bot.command("pullupdate", async (ctx) => {
 bot.launch();
 console.log("🤖  Bot started...");
 
-// Graceful Stop
 process.once('SIGINT', () => bot.stop('SIGINT'));
 process.once('SIGTERM', () => bot.stop('SIGTERM'));
