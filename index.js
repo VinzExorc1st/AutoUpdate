@@ -33,14 +33,28 @@ async function downloadFile(fileId, ctx) {
   return Buffer.from(res.data);
 }
 
-async function uploadGitHub(path, buffer) {
+async function uploadGitHub(filePath, buffer) {
+  let sha;
+  try {
+    const { data } = await octo.repos.getContent({
+      owner: GH_OWNER,
+      repo: GH_REPO,
+      path: filePath,
+      ref: GH_BRANCH
+    });
+    sha = data.sha;
+  } catch (err) {
+    if (err.status !== 404) throw err;
+  }
+
   return octo.repos.createOrUpdateFileContents({
     owner: GH_OWNER,
     repo: GH_REPO,
     branch: GH_BRANCH,
-    path,
-    message: `Upload ${path} via Telegram Bot`,
+    path: filePath,
+    message: `Upload ${filePath} via Telegram Bot`,
     content: buffer.toString("base64"),
+    sha: sha 
   });
 }
 
@@ -79,15 +93,18 @@ bot.start((ctx) => {
 <b>👋 Halo ${esc(ctx.from.first_name)}!</b>
 
 Selamat datang di <b>GitHub Manager Bot</b>.
+Kelola & update script kamu langsung dari Telegram dengan mudah.
 
 <b>📁 MENU UTAMA:</b>
-• /uploadgh - Upload file ke GitHub
-• /pullupdate - Update script bot dari GitHub
+• <code>/uploadgh</code> — Upload file yang sedang diproses ke GitHub
+• <code>/pullupdate</code> — Tarik update script langsung dari repository
 
-<b>Cara Upload:</b>
-1. Kirim file/zip.
+<b>📌 Cara Upload:</b>
+1. Kirim file atau ZIP ke chat ini.
 2. Reply file tersebut.
-3. Ketik <code>/uploadgh</code>.
+3. Jalankan perintah <code>/uploadgh</code>.
+
+<b>🛠 Developer:</b> <a href="https://t.me/vinzxiterr">t.me/vinzxiterr</a>
 `;
 
   ctx.replyWithPhoto(thumbnail, {
